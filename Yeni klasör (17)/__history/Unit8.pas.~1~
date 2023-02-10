@@ -1,0 +1,37 @@
+unit Unit8;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, Vcl.Imaging.jpeg,
+  Vcl.ExtCtrls, Vcl.StdCtrls;
+
+type
+  TForm8 = class(TForm)
+    Image1: TImage;
+    SpeedButton1: TSpeedButton;
+    Label1: TLabel;
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form8: TForm8;
+
+implementation
+
+{$R *.dfm}
+
+uses Unit3;
+
+procedure TForm8.SpeedButton1Click(Sender: TObject);
+begin
+Form3.show;
+Form8.Close;
+end;
+
+end.

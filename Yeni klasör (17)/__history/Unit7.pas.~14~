@@ -1,0 +1,100 @@
+unit Unit7;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Imaging.jpeg,
+  Vcl.ExtCtrls, Vcl.Imaging.pngimage, Vcl.Buttons, CPort;
+
+type
+  TForm7 = class(TForm)
+    Image1: TImage;
+    Label1: TLabel;
+    Label2: TLabel;
+    Memo1: TMemo;
+    Label3: TLabel;
+    Memo2: TMemo;
+    Label4: TLabel;
+    Memo3: TMemo;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    SpeedButton1: TSpeedButton;
+    Label5: TLabel;
+    SpeedButton2: TSpeedButton;
+    Label6: TLabel;
+    SpeedButton3: TSpeedButton;
+    Label7: TLabel;
+    ComPort1: TComPort;
+    ComDataPacket1: TComDataPacket;
+    ComDataPacket2: TComDataPacket;
+
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure ComDataPacket1Packet(Sender: TObject; const Str: string);
+    procedure ComDataPacket2Packet(Sender: TObject; const Str: string);
+
+
+
+  private
+    { Private declarations }
+
+  public
+    { Public declarations }
+  end;
+
+var
+  Form7: TForm7;
+  const
+  UUID = '{00001101-0000-1000-8000-00805F9B34FB}';
+
+implementation
+
+{$R *.dfm}
+
+uses Unit5;
+
+
+
+
+
+
+
+
+
+procedure TForm7.ComDataPacket1Packet(Sender: TObject; const Str: string);
+begin
+memo1.Lines.Add(str);
+end;
+
+procedure TForm7.ComDataPacket2Packet(Sender: TObject; const Str: string);
+begin
+memo2.Lines.Add(str);
+end;
+
+procedure TForm7.FormCreate(Sender: TObject);
+begin
+Form7.Position:=poScreenCenter;
+Form7.BorderStyle:=bsToolWindow;
+end;
+
+procedure TForm7.SpeedButton1Click(Sender: TObject);
+begin
+Form7.Close;
+Form5.Show;
+end;
+
+procedure TForm7.SpeedButton2Click(Sender: TObject);
+begin
+ComPort1.ShowSetupDialog;
+end;
+
+procedure TForm7.SpeedButton3Click(Sender: TObject);
+begin
+ComPort1.Open;
+end;
+
+end.

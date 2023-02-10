@@ -1,0 +1,121 @@
+unit Unit7;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, System.Bluetooth,FMX.Edit, FMX.Memo.Types, FMX.ScrollBox, FMX.Memo,
+  System.Bluetooth.Components,FMX.ListBox,FMX.StdCtrls;
+
+type
+  TForm7 = class(TForm)
+    Button1: TButton;
+    Bluetooth1: TBluetooth;
+    eslesencihazlarlistesi: TButton;
+    cbPareados: TComboBox;
+    lblConexao: TLabel;
+    btGiris: TButton;
+    Memo1: TMemo;
+    baglan: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure eslesencihazlarlistesiClick(Sender: TObject);
+    procedure btGirisClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure baglanClick(Sender: TObject);
+
+  private
+    { Private declarations }
+    FSocket: TBluetoothSocket;
+    FDeviceList: TBluetoothDeviceList;
+    function conectar(deviceName: string): Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  Form7: TForm7;
+  const
+  UUID = '{00001101-0000-1000-8000-00805F9B34FB}';
+
+implementation
+
+{$R *.dfm}
+
+uses Unit5;
+
+
+procedure TForm7.baglanClick(Sender: TObject);
+begin
+    if conectar(cbPareados.Selected.Text) then
+    lblConexao.Text := 'baðlý'
+  else
+    lblConexao.Text := 'baðlý deðil';
+end;
+
+procedure TForm7.btGirisClick(Sender: TObject);
+var
+  v: TArray<System.Byte>;
+  cont: Byte;
+  valor:string;
+begin
+valor := '';
+  if (FSocket <> nil) and (FSocket.Connected) then
+  begin
+    SetLength(v, 5);
+
+    FSocket.Connect;
+    FSocket.SendData(v);
+    Sleep(10);
+    //SetLength(v, 10);
+    v := FSocket.ReceiveData;
+    SetLength(v, length(v));
+    for cont := pred(length(v)) downto 0 do
+      valor := chr(v[cont]) + valor;
+
+    memo1.Lines.Add(valor);
+  end;
+
+
+end;
+function TForm7.conectar(deviceName: string): Boolean;
+var
+  lDevice: TBluetoothDevice;
+begin
+  result := false;
+  for lDevice in Bluetooth1.PairedDevices do
+  begin
+    if lDevice.DeviceName = deviceName then
+    begin
+      FSocket := lDevice.CreateClientSocket(StringToGUID(UUID), True);
+      if FSocket <> nil then
+      begin
+        FSocket.Connect;
+        result := FSocket.Connected;
+      end;
+    end;
+  end;
+end;
+
+procedure TForm7.Button1Click(Sender: TObject);
+begin
+form5.show;
+form7.close;
+
+
+end;
+
+procedure TForm7.eslesencihazlarlistesiClick(Sender: TObject);
+var
+lDevice: TBluetoothDevice;
+begin
+cbPareados.Items.Clear;
+  for lDevice in Bluetooth1.PairedDevices do
+    cbPareados.Items.Add(lDevice.DeviceName);
+
+end;
+procedure TForm7.FormShow(Sender: TObject);
+begin
+  Bluetooth1.Enabled := True;
+end;
+
+end.
